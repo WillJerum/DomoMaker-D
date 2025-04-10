@@ -62,7 +62,7 @@ const DomoList = (props) => {
     const domoNodes = domos.map(domo => {
         return (
             <div key={domo._id} className="domo">
-                <img src="/hosted/img/domoFace.jpeg" alt="domo face" className="domoFace" />
+                <img src="/assets/img/domoFace.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">{domo.name}</h3>
                 <h3 className="domoAge">{domo.age}</h3>
             </div>
