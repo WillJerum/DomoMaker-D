@@ -50,15 +50,27 @@ const DomoForm = (props) => {
 
 const DomoList = (props) => {
     const [domos, setDomos] = useState([props.domos]);
+    const [sortKey, setSortKey] = useState('name'); 
 
     useEffect(() => {
         const loadDomosFromServer = async () => {
             const response = await fetch('/getDomos');
             const data = await response.json();
             setDomos(data.domos);
-        }
+        };
         loadDomosFromServer();
     }, [props.reloadDomos]);
+
+    const handleSortChange = (e) => {
+        setSortKey(e.target.value);
+    };
+
+    const sortedDomos = [...domos].sort((a, b) => {
+        if (sortKey === 'name') return a.name.localeCompare(b.name);
+        if (sortKey === 'age') return a.age - b.age;
+        if (sortKey === 'level') return a.level - b.level;
+        return 0;
+    });
 
     if (domos.length === 0) {
         return (
@@ -68,20 +80,26 @@ const DomoList = (props) => {
         );
     }
 
-    const domoNodes = domos.map(domo => {
-        return (
-            <div key={domo._id} className="domo">
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">{domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoLevel">Level: {domo.level}</h3>
-            </div>
-        );
-    });
+    const domoNodes = sortedDomos.map((domo) => (
+        <div key={domo._id} className="domo">
+            <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+            <h3 className="domoName">{domo.name}</h3>
+            <h3 className="domoAge">Age: {domo.age}</h3>
+            <h3 className="domoLevel">Level: {domo.level}</h3>
+        </div>
+    ));
 
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div>
+            <div className="sortOptions">
+                <label htmlFor="sort">Sort By: </label>
+                <select id="sort" onChange={handleSortChange}>
+                    <option value="name">Name</option>
+                    <option value="age">Age</option>
+                    <option value="level">Level</option>
+                </select>
+            </div>
+            <div className="domoList">{domoNodes}</div>
         </div>
     );
 };
