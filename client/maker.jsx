@@ -9,13 +9,14 @@ const handleDomo = (e, onDomoAdded) => {
 
     const name = e.target.querySelector('#domoName').value;
     const age = e.target.querySelector('#domoAge').value;
+    const level = e.target.querySelector('#domoLevel').value;
 
-    if (!name || !age) {
+    if (!name || !age || !level) {
         helper.handleError('All fields are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age}, () => onDomoAdded(name, age));
+    helper.sendPost(e.target.action, {name, age, level}, () => onDomoAdded(name, age, level));
     return false;
 }
 
@@ -30,10 +31,18 @@ const DomoForm = (props) => {
             method="POST"
             className="domoForm"
         >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" min="0" name="age" />
+            <div>
+                <label htmlFor="name">Name: </label>
+                <input id="domoName" type="text" name="name" placeholder="Domo Name" />
+            </div>
+            <div>
+                <label htmlFor="age">Age: </label>
+                <input id="domoAge" type="number" min="0" name="age" />
+            </div>
+            <div>
+                <label htmlFor="level">Level: </label>
+                <input id="domoLevel" type="number" min="1" name="level" />
+            </div>
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
     );
@@ -64,7 +73,8 @@ const DomoList = (props) => {
             <div key={domo._id} className="domo">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">{domo.name}</h3>
-                <h3 className="domoAge">{domo.age}</h3>
+                <h3 className="domoAge">Age: {domo.age}</h3>
+                <h3 className="domoLevel">Level: {domo.level}</h3>
             </div>
         );
     });
